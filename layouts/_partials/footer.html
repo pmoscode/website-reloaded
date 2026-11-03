@@ -1,0 +1,18 @@
+<footer class="site-footer">
+  <div class="wrap">
+    <a class="brand" href="{{ site.Home.RelPermalink }}">{{ partial "logo.html" "round" }}<span>{{ site.Title }}</span></a>
+    <span>© {{ site.Params.since }}–{{ now.Year }} {{ site.Copyright }}. {{ site.Params.license }}.</span>
+    <nav aria-label="Footer">
+      <a href="{{ "index.xml" | relURL }}">RSS</a>
+      <a href="{{ "page/about/" | relURL }}">About</a>
+      {{- if partial "consent-items.html" . }}
+      <button class="linkish" type="button" data-consent-open>Privacy settings</button>
+      {{- end }}
+    </nav>
+    <div class="social">
+      {{- range site.Params.social }}
+      <a href="{{ .url }}" rel="me noopener" aria-label="{{ .name }}" title="{{ .name }}">{{ partial "icon.html" .icon }}</a>
+      {{- end }}
+    </div>
+  </div>
+</footer>

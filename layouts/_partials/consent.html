@@ -1,0 +1,27 @@
+{{- $items := partial "consent-items.html" . -}}
+{{- if $items }}
+<div class="consent-banner" data-consent-banner hidden role="region" aria-label="Privacy settings">
+  <p>This site can load a few external services, like visitor statistics or game embeds. You decide what is allowed.</p>
+  <div class="actions">
+    <button class="btn ghost" type="button" data-consent-open>Settings</button>
+    <button class="btn ghost" type="button" data-consent-deny>Decline</button>
+    <button class="btn" type="button" data-consent-accept>Allow all</button>
+  </div>
+</div>
+<dialog class="consent-dialog" data-consent-dialog aria-labelledby="consent-title">
+  <form method="dialog">
+    <h2 id="consent-title">Privacy settings</h2>
+    <p>Choose which external services may load. You can change this any time via “Privacy settings” in the footer.</p>
+    {{- range $items }}
+    <label class="c-item">
+      <input type="checkbox" name="{{ .key }}" data-consent-key="{{ .key }}">
+      <span><b>{{ .title }}</b><span>{{ .description }}</span></span>
+    </label>
+    {{- end }}
+    <div class="actions">
+      <button class="btn ghost" type="submit" value="save" data-consent-save>Save selection</button>
+      <button class="btn" type="submit" value="all" data-consent-accept>Allow all</button>
+    </div>
+  </form>
+</dialog>
+{{- end }}

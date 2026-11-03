@@ -1,0 +1,42 @@
+{{- /*
+  Bilder im Artikel: responsive (WebP, srcset), lazy, Klick öffnet Original.
+  Einzelnes Bild im Absatz → <figure> mit Bildunterschrift (Titel, sonst Alt-Text).
+  Mehrere Bilder in einem Absatz → nebeneinander (siehe CSS).
+*/ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $res := "" -}}
+{{- if not $u.IsAbs }}{{ with .PageInner.Resources.Get $u.Path }}{{ $res = . }}{{ end }}{{ end -}}
+{{- $alt := .PlainText -}}
+{{- $img := "" -}}
+{{- if and $res (reflect.IsImageResource $res) -}}
+  {{- if not (reflect.IsImageResourceProcessable $res) -}}
+    {{- $dim := "" -}}
+    {{- if reflect.IsImageResourceWithMeta $res }}{{ $dim = printf ` width="%d" height="%d"` $res.Width $res.Height }}{{ end -}}
+    {{- $img = printf `<img src="%s" alt="%s"%s loading="lazy" decoding="async">` $res.RelPermalink $alt $dim -}}
+  {{- else -}}
+    {{- $set := slice -}}
+    {{- $src := "" -}}
+    {{- $big := "" -}}
+    {{- range slice 480 800 1200 1600 -}}
+      {{- if or (le . $res.Width) (not $set) -}}
+        {{- $w := cond (le . $res.Width) . $res.Width -}}
+        {{- $r := $res.Resize (printf "%dx webp" $w) -}}
+        {{- $set = $set | append (printf "%s %dw" $r.RelPermalink $r.Width) -}}
+        {{- if or (not $src) (le $r.Width 1200) }}{{ $src = $r }}{{ end -}}
+        {{- $big = $r -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $sizes := cond .IsBlock "(max-width: 760px) 100vw, 700px" "(max-width: 760px) 50vw, 350px" -}}
+    {{- $img = printf `<img src="%s" srcset="%s" sizes="%s" width="%d" height="%d" alt="%s" loading="lazy" decoding="async">` $src.RelPermalink (delimit $set ", ") $sizes $big.Width $big.Height $alt -}}
+  {{- end -}}
+{{- else -}}
+  {{- $img = printf `<img src="%s" alt="%s" loading="lazy" decoding="async">` (.Destination | safeURL) $alt -}}
+{{- end -}}
+{{- if .IsBlock -}}
+<figure>
+  {{- if $res }}<a href="{{ $res.RelPermalink }}" class="zoom">{{ $img | safeHTML }}</a>{{ else }}{{ $img | safeHTML }}{{ end }}
+  {{- with or .Title $alt }}<figcaption>{{ . }}</figcaption>{{ end }}
+</figure>
+{{- else -}}
+{{ $img | safeHTML }}
+{{- end -}}

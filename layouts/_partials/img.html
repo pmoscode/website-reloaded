@@ -1,0 +1,20 @@
+{{- /*
+  Responsives Bild auf feste Größe zugeschnitten (Karten, Thumbnails).
+  dict: res (Resource), w, h, sizes, alt, class, eager (bool)
+  GIF/SVG werden unverändert ausgeliefert (Animation bleibt erhalten).
+*/ -}}
+{{- $r := .res -}}
+{{- $w := .w | default 800 -}}
+{{- $h := .h | default 500 -}}
+{{- $loading := cond (.eager | default false) "eager" "lazy" -}}
+{{- if or (not (reflect.IsImageResourceProcessable $r)) (eq $r.MediaType.SubType "gif") -}}
+<img src="{{ $r.RelPermalink }}" alt="{{ .alt }}"{{ with .class }} class="{{ . }}"{{ end }}{{ if reflect.IsImageResourceWithMeta $r }} width="{{ $r.Width }}" height="{{ $r.Height }}"{{ end }} loading="{{ $loading }}" decoding="async">
+{{- else -}}
+{{- $s1 := $r.Fill (printf "%dx%d webp smart" $w $h) -}}
+{{- $set := slice (printf "%s %dw" $s1.RelPermalink $s1.Width) -}}
+{{- if ge $r.Width (mul $w 2) -}}
+  {{- $s2 := $r.Fill (printf "%dx%d webp smart" (mul $w 2) (mul $h 2)) -}}
+  {{- $set = $set | append (printf "%s %dw" $s2.RelPermalink $s2.Width) -}}
+{{- end -}}
+<img src="{{ $s1.RelPermalink }}" srcset="{{ delimit $set ", " }}" sizes="{{ .sizes | default "(max-width: 700px) 100vw, 400px" }}" width="{{ $s1.Width }}" height="{{ $s1.Height }}" alt="{{ .alt }}"{{ with .class }} class="{{ . }}"{{ end }} loading="{{ $loading }}" decoding="async">
+{{- end -}}

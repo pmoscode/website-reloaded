@@ -1,0 +1,7 @@
+{{- /* Codeblock als Terminalfenster (wie im Logo) mit Kopieren-Button. */ -}}
+{{- $lang := .Type | default "text" -}}
+{{- $res := transform.HighlightCodeBlock . -}}
+<div class="codeblock">
+  <div class="tbar">{{ partial "icon.html" "computer" }}<span>{{ $lang }}</span><button class="copy" type="button" data-copy>Copy</button></div>
+  {{ $res.Wrapped }}
+</div>

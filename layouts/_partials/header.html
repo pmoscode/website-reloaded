@@ -1,0 +1,25 @@
+{{- $current := . }}
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" href="{{ site.Home.RelPermalink }}" aria-label="{{ site.Title }} – home">{{ partial "logo.html" "round" }}<span>{{ site.Title }}</span></a>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      {{- range site.Menus.main }}
+        {{- $active := or ($current.IsMenuCurrent "main" .) ($current.HasMenuCurrent "main" .) }}
+        {{- if and (eq .Name "Projects") (eq $current.Section "post") }}{{ $active = true }}{{ end }}
+        {{- if and (eq .Name "Categories") (eq $current.Kind "term") }}{{ $active = true }}{{ end }}
+        <a href="{{ .URL }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+      {{- end }}
+    </nav>
+    <div class="tools">
+      <a class="tbtn search-btn" href="{{ "page/search/" | relURL }}" data-open-search aria-label="Search" aria-keyshortcuts="/">
+        {{ partial "icon.html" "search" }}<span class="lbl">Search</span><kbd>/</kbd>
+      </a>
+      <button class="tbtn square theme-btn" type="button" data-theme-toggle aria-label="Switch color theme">
+        {{ partial "icon.html" (dict "name" "moon" "class" "i-moon") }}{{ partial "icon.html" (dict "name" "sun" "class" "i-sun") }}
+      </button>
+      <button class="tbtn square menu-btn" type="button" data-menu aria-controls="site-nav" aria-expanded="false" aria-label="Menu">
+        {{ partial "icon.html" "menu" }}
+      </button>
+    </div>
+  </div>
+</header>

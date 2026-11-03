@@ -1,0 +1,10 @@
+{{- /* Serien-Info: gibt dict mit name, pages (aufsteigend), index (1-basiert), total zurück – oder "". */ -}}
+{{- $out := "" -}}
+{{- with .GetTerms "series" -}}
+  {{- $term := index . 0 -}}
+  {{- $pages := $term.Pages.ByDate -}}
+  {{- $idx := 0 -}}
+  {{- range $i, $p := $pages }}{{ if eq $p $ }}{{ $idx = add $i 1 }}{{ end }}{{ end -}}
+  {{- $out = dict "term" $term "pages" $pages "index" $idx "total" (len $pages) -}}
+{{- end -}}
+{{- return $out -}}

@@ -1,0 +1,12 @@
+{{- /*
+  Ersatz für den video-Shortcode aus hugo-theme-stack.
+  {{< video src="/mov/…/datei.mp4" autoplay="false" >}}
+*/ -}}
+{{- $src := .Get "src" -}}
+{{- $autoplay := eq (printf "%v" (.Get "autoplay" | default "false")) "true" -}}
+<figure class="video">
+  <video controls preload="metadata" playsinline{{ if $autoplay }} autoplay muted loop{{ end }}>
+    <source src="{{ $src | relURL }}" type="video/mp4">
+    Your browser cannot play this video. <a href="{{ $src | relURL }}">Download it</a>.
+  </video>
+</figure>

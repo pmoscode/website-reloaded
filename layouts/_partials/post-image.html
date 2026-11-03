@@ -1,0 +1,5 @@
+{{- /* Titelbild eines Beitrags: Front Matter "image", sonst erstes Bild im Bundle. */ -}}
+{{- $img := "" -}}
+{{- with .Params.image }}{{ with $.Resources.Get . }}{{ $img = . }}{{ end }}{{ end -}}
+{{- if not $img }}{{ with .Resources.GetMatch "**.{jpg,jpeg,png,webp,JPG,PNG}" }}{{ $img = . }}{{ end }}{{ end -}}
+{{- return $img -}}

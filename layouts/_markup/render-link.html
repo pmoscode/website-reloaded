@@ -1,0 +1,6 @@
+{{- $u := urls.Parse .Destination -}}
+{{- $href := .Destination -}}
+{{- if and (not $u.IsAbs) (strings.HasSuffix $u.Path ".md") }}{{ with .PageInner.GetPage $u.Path }}{{ $href = .RelPermalink }}{{ end }}{{ end -}}
+{{- $ext := and $u.IsAbs (not (strings.HasPrefix .Destination site.BaseURL)) (in (slice "http" "https") $u.Scheme) -}}
+<a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if $ext }} rel="noopener"{{ end }}>{{ .Text }}</a>
+{{- /**/ -}}

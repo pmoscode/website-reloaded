@@ -1,0 +1,11 @@
+{{- /* Suchfeld + Ergebnisliste. Wird vom Dialog und von der Suchseite genutzt (data-search). */ -}}
+<div class="s-box" data-search>
+  <div class="s-field">
+    {{ partial "icon.html" "search" }}
+    <input type="search" placeholder="Search articles" aria-label="Search articles" autocomplete="off" spellcheck="false" data-search-input>
+    {{- if .close }}<button class="s-close" type="button" data-search-close aria-label="Close search"><kbd>Esc</kbd></button>{{ end }}
+  </div>
+  <div class="s-status" data-search-status role="status" aria-live="polite">Type to search all articles.</div>
+  <ul class="s-results" data-search-results></ul>
+  <div class="s-hint"><span><kbd>↑</kbd> <kbd>↓</kbd> to navigate</span><span><kbd>Enter</kbd> to open</span><span>Full-text search by Pagefind</span></div>
+</div>

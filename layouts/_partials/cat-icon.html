@@ -1,0 +1,5 @@
+{{- /* Liefert den Icon-Namen für eine Kategorie (Name oder Term-Seite). */ -}}
+{{- $name := . -}}
+{{- if not (reflect.IsMap .) }}{{ with .Title }}{{ $name = . }}{{ end }}{{ end -}}
+{{- $icon := index site.Params.categoryIcons (lower $name) | default site.Params.categoryIconDefault -}}
+{{- return $icon -}}

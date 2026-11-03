@@ -1,0 +1,39 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{- $title := cond .IsHome (printf "%s – %s" site.Title site.Params.motto) (printf "%s · %s" .Title site.Title) }}
+<title>{{ $title }}</title>
+{{- if site.Params.noindex }}
+<meta name="robots" content="noindex, nofollow">
+{{- end }}
+{{ partial "seo.html" (dict "page" . "title" $title) }}
+
+{{- /* Theme früh setzen, damit es kein Aufblitzen gibt */}}
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<meta name="theme-color" content="#F2F3F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#15171B" media="(prefers-color-scheme: dark)">
+
+{{- /* Schriften veröffentlichen + vorladen */}}
+{{- with resources.Get "fonts/onest-latin-wght.woff2" }}
+<link rel="preload" href="{{ .RelPermalink }}" as="font" type="font/woff2" crossorigin>
+{{- end }}
+{{- with resources.Get "fonts/jetbrains-mono-latin-wght.woff2" }}{{ .Publish }}{{ end }}
+
+{{- /* CSS: alle Dateien aus assets/css in Namensreihenfolge */}}
+{{- $css := resources.Match "css/*.css" | resources.Concat "css/main.css" }}
+{{- if ne hugo.Environment "development" }}{{ $css = $css | minify | fingerprint }}{{ end }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}"{{ with $css.Data.Integrity }} integrity="{{ . }}"{{ end }}>
+
+{{- /* Favicons: SVG (passt sich Dark Mode an) + PNG/ICO-Fallbacks */}}
+{{- $logo := (resources.Get "logo/logo-round.svg").Content }}
+{{- $fav := replace $logo `aria-hidden="true">` `><style>svg{color:#1E2227}circle{fill:#F5A05C}@media(prefers-color-scheme:dark){svg{color:#15171B}}</style>` 1 }}
+{{- $fav = resources.FromString "favicon.svg" $fav }}
+<link rel="icon" href="{{ $fav.RelPermalink }}" type="image/svg+xml">
+<link rel="icon" href="{{ "favicon/favicon-32x32.png" | relURL }}" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="{{ "favicon/apple-touch-icon.png" | relURL }}">
+<link rel="manifest" href="{{ "favicon/site.webmanifest" | relURL }}">
+
+{{- with .OutputFormats.Get "rss" }}
+<link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ site.Title }}">
+{{- else }}
+<link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | relURL }}" title="{{ site.Title }}">
+{{- end }}

@@ -1,0 +1,13 @@
+{{ define "main" }}
+<div class="wrap">
+  <header class="page-head">
+    <h1>{{ .Title }}</h1>
+    {{- with .Description }}<p>{{ . }}</p>{{ end }}
+  </header>
+  {{- $pag := .Paginate .RegularPagesRecursive }}
+  <div class="grid">
+    {{- range $i, $p := $pag.Pages }}{{ partial "card.html" (dict "page" $p "eager" (lt $i 3)) }}{{ end }}
+  </div>
+  {{ partial "pager.html" . }}
+</div>
+{{ end }}

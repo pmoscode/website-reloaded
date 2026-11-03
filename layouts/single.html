@@ -1,0 +1,89 @@
+{{ define "bodyclass" }}k-page{{ if ne .Section "post" }} page-simple{{ end }}{{ end }}
+{{ define "main" }}
+{{- $isPost := eq .Section "post" }}
+{{- $cats := .GetTerms "categories" }}
+{{- $img := partial "post-image.html" . }}
+{{- $showHero := false }}
+{{- with $img }}{{ if and $isPost (not (strings.Contains $.RawContent .Name)) }}{{ $showHero = true }}{{ end }}{{ end }}
+{{- $toc := "" }}{{ if and (ne .Params.toc false) site.Params.toc $isPost }}{{ $toc = partial "toc.html" . }}{{ end }}
+{{- $series := partial "series.html" . }}
+
+<article class="article wrap" data-pagefind-body>
+  <header class="a-head">
+    {{- if $isPost }}
+    <div class="a-cats" data-pagefind-ignore>
+      {{- range $cats }}
+      <a class="a-cat" href="{{ .RelPermalink }}"><span class="badge">{{ partial "icon.html" (partial "cat-icon.html" .) }}</span>{{ .LinkTitle }}</a>
+      {{- end }}
+    </div>
+    {{- end }}
+    <h1>{{ .Title }}</h1>
+    {{- with .Description }}<p class="lead">{{ . }}</p>{{ end }}
+    {{- if $isPost }}
+    <div class="meta" data-pagefind-ignore>
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format site.Params.dateFormatLong }}</time>
+      {{- if and (ne .Lastmod .Date) (gt (.Lastmod.Sub .Date).Hours 24) }}<span>Updated {{ .Lastmod.Format site.Params.dateFormatLong }}</span>{{ end }}
+      <span>{{ .ReadingTime }} min read</span>
+      {{- with $series }}{{ if gt .total 1 }}<span>Part {{ .index }} of {{ .total }}</span>{{ end }}{{ end }}
+    </div>
+    {{- end }}
+    {{- /* Metadaten für die Suche */}}
+    {{- range $cats }}<span hidden data-pagefind-filter="category">{{ .LinkTitle }}</span>{{ end }}
+    {{- with $img }}{{ if not (in (slice "gif" "svg+xml") .MediaType.SubType) }}<span hidden data-pagefind-meta="image:{{ (.Fill "160x120 webp smart").RelPermalink }}"></span>{{ else }}<span hidden data-pagefind-meta="image:{{ .RelPermalink }}"></span>{{ end }}{{ end }}
+  </header>
+
+  {{- if $showHero }}
+  <figure class="a-hero" data-pagefind-ignore>
+    {{ partial "img.html" (dict "res" $img "w" 1060 "h" 596 "sizes" "(max-width: 1100px) 100vw, 1060px" "eager" true "alt" "") }}
+  </figure>
+  {{- end }}
+
+  <div class="a-body">
+    <div class="prose">
+      {{- if $toc }}
+      <details class="toc-inline" data-pagefind-ignore><summary>Contents</summary><nav aria-label="Contents">{{ $toc }}</nav></details>
+      {{- end }}
+      {{ .Content }}
+
+      {{- with $series }}{{ if gt .total 1 }}
+      <aside class="series" data-pagefind-ignore aria-label="Series">
+        <b>This article is part {{ .index }} of the series <a href="{{ .term.RelPermalink }}">{{ .term.LinkTitle }}</a></b>
+        <ol>
+          {{- range .pages }}
+          <li{{ if eq . $ }} aria-current="page"{{ end }}>{{ if eq . $ }}{{ .Title }}{{ else }}<a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}</li>
+          {{- end }}
+        </ol>
+      </aside>
+      {{- end }}{{ end }}
+    </div>
+    {{- if $toc }}
+    <aside class="toc" data-pagefind-ignore data-toc><b>Contents</b>{{ $toc }}</aside>
+    {{- end }}
+  </div>
+
+  {{- if $isPost }}
+  <footer class="a-foot" data-pagefind-ignore>
+    {{- with .GetTerms "tags" }}
+    <ul class="chips" aria-label="Tags">{{ range . }}<li><a class="chip tag" href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>{{ end }}</ul>
+    {{- end }}
+    {{- if ne .Params.license false }}
+    <div class="license">{{ partial "icon.html" "license" }}<span>{{ .Params.license | default site.Params.license }}</span></div>
+    {{- end }}
+    <nav class="neighbors" aria-label="More articles">
+      {{- with .NextInSection }}<a class="prev" href="{{ .RelPermalink }}"><small>Older</small><b>{{ .Title }}</b></a>{{ end }}
+      {{- with .PrevInSection }}<a class="next" href="{{ .RelPermalink }}"><small>Newer</small><b>{{ .Title }}</b></a>{{ end }}
+    </nav>
+  </footer>
+  {{- end }}
+</article>
+
+{{- if $isPost }}
+{{- $related := first 3 (site.RegularPages.Related .) }}
+{{- with $related }}
+<section class="related wrap" data-pagefind-ignore>
+  <div class="sec-head"><h2>Related projects</h2></div>
+  <div class="grid">{{ range . }}{{ partial "card.html" (dict "page" .) }}{{ end }}</div>
+</section>
+{{- end }}
+{{- end }}
+{{ end }}

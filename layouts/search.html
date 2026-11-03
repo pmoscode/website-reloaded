@@ -1,0 +1,8 @@
+{{ define "bodyclass" }}k-page search-page{{ end }}
+{{ define "main" }}
+<div class="wrap">
+  <header class="page-head"><h1>{{ .Title }}</h1><p>Full-text search across all articles.</p></header>
+  {{ partial "search-box.html" (dict "close" false) }}
+  <noscript><p>The search needs JavaScript. You can also browse the <a href="{{ "page/archives/" | relURL }}">archives</a>.</p></noscript>
+</div>
+{{ end }}

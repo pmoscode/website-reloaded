@@ -1,0 +1,24 @@
+# Hugo
+public/
+resources/_gen/
+.hugo_build.lock
+hugo_stats.json
+
+# Pagefind-Index (wird beim Build erzeugt)
+static/pagefind/
+
+# Lokale Tools (Taskfile lädt z. B. pagefind hierhin)
+.bin/
+.task/
+
+# Editor / OS
+.idea/
+.junie/
+.vscode/
+.DS_Store
+
+# Design-Entwürfe (temporär)
+mockups/
+
+# Lokale Claude-Code-Konfiguration
+.claude/

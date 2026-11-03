@@ -1,0 +1,24 @@
+{{ define "main" }}
+<div class="wrap">
+  <header class="page-head">
+    <h1>{{ .Title }}</h1>
+    <p>{{ len .Data.Terms }} {{ .Data.Plural }} across all articles.</p>
+  </header>
+  {{- if eq .Data.Plural "categories" }}
+  <div class="tiles">
+    {{- range .Data.Terms.ByCount }}
+    <a class="tile" href="{{ .Page.RelPermalink }}">
+      <span class="badge">{{ partial "icon.html" (partial "cat-icon.html" .Page) }}</span>
+      <span><b>{{ .Page.LinkTitle }}</b><span>{{ .Count }} {{ cond (eq .Count 1) "article" "articles" }}</span></span>
+    </a>
+    {{- end }}
+  </div>
+  {{- else }}
+  <ul class="chips">
+    {{- range .Data.Terms.Alphabetical }}
+    <li><a class="chip tag" href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }} <span class="n">{{ .Count }}</span></a></li>
+    {{- end }}
+  </ul>
+  {{- end }}
+</div>
+{{ end }}

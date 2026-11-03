@@ -1,0 +1,4 @@
+{{- /* Original-Logo als Inline-SVG (currentColor). Aufruf: partial "logo.html" "round" | "plain" */ -}}
+{{- $file := cond (eq . "plain") "logo/logo.svg" "logo/logo-round.svg" -}}
+<span class="logo">{{ (resources.Get $file).Content | strings.TrimSpace | safeHTML }}</span>
+{{- /**/ -}}

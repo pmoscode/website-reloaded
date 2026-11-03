@@ -1,0 +1,19 @@
+{{- /* Ebenen-Motiv aus dem Logo: Terminal, 3D-Drucker, Sägeblatt. Rein dekorativ. */ -}}
+{{- $slug := "my-next-project" }}{{ $year := now.Year }}
+{{- with . }}{{ $slug = path.Base .File.Dir }}{{ $year = .Date.Year }}{{ end }}
+{{- $print := site.GetPage "/categories/3d-print" }}
+<div class="stage" data-stage aria-hidden="true">
+  <div class="layer l-term" data-depth="10">
+    <div class="tbar">{{ partial "icon.html" "computer" }} zsh — pmoscode</div>
+<pre><span class="p">$</span> task new:post NAME={{ $slug }}
+<span class="ok">✓</span> post/{{ $year }}/{{ $slug }}/index.md
+<span class="p">$</span> task serve
+  ready on localhost:1313
+<span class="p">$</span> <span class="cursor"></span></pre>
+  </div>
+  <div class="layer l-print" data-depth="22">
+    {{ partial "icon.html" (dict "name" "print" "class" "big") }}
+    <div><b>3D print</b><small>{{ with $print }}{{ len .Pages }} projects{{ else }}Filament & patience{{ end }}</small></div>
+  </div>
+  <div class="layer l-saw" data-depth="34">{{ partial "icon.html" "wood" }}</div>
+</div>

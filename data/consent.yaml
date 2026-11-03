@@ -1,0 +1,7 @@
+# Externe Inhalte, die erst nach Zustimmung geladen werden.
+# key:         wird im Shortcode {{< embed consent="key" … >}} verwendet
+# Matomo wird automatisch ergänzt, sobald params.analytics.matomo gesetzt ist.
+items:
+  - key: itchio
+    title: itch.io embeds
+    description: Shows game widgets from itch.io. Loading them connects to itch.io servers and transfers your IP address.

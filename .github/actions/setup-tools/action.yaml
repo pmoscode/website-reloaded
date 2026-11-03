@@ -1,0 +1,27 @@
+name: Setup Hugo & Pagefind
+description: Installiert Hugo (extended) und Pagefind in den angegebenen Versionen
+
+inputs:
+  hugo-version:
+    required: true
+  pagefind-version:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install Hugo ${{ inputs.hugo-version }}
+      shell: bash
+      run: |
+        curl -fsSL -o "${{ runner.temp }}/hugo.deb" \
+          "https://github.com/gohugoio/hugo/releases/download/v${{ inputs.hugo-version }}/hugo_extended_${{ inputs.hugo-version }}_linux-amd64.deb"
+        sudo dpkg -i "${{ runner.temp }}/hugo.deb"
+        hugo version
+
+    - name: Install Pagefind ${{ inputs.pagefind-version }}
+      shell: bash
+      run: |
+        mkdir -p "${{ runner.temp }}/bin"
+        curl -fsSL "https://github.com/Pagefind/pagefind/releases/download/v${{ inputs.pagefind-version }}/pagefind-v${{ inputs.pagefind-version }}-x86_64-unknown-linux-musl.tar.gz" \
+          | tar -xz -C "${{ runner.temp }}/bin" pagefind
+        echo "${{ runner.temp }}/bin" >> "$GITHUB_PATH"

@@ -1,0 +1,11 @@
+{{- $items := slice -}}
+{{- range partial "consent-items.html" . }}{{ $items = $items | append (dict "key" .key "title" .title) }}{{ end -}}
+{{- $params := dict
+    "base" site.Home.RelPermalink
+    "pagefind" ("pagefind/pagefind.js" | relURL)
+    "consent" $items
+    "matomo" (site.Params.analytics.matomo | default dict) -}}
+{{- $opts := dict "targetPath" "js/main.js" "params" $params "minify" (ne hugo.Environment "development") "target" "es2020" -}}
+{{- $js := resources.Get "js/main.js" | js.Build $opts -}}
+{{- if ne hugo.Environment "development" }}{{ $js = $js | fingerprint }}{{ end }}
+<script src="{{ $js.RelPermalink }}" defer{{ with $js.Data.Integrity }} integrity="{{ . }}"{{ end }}></script>

@@ -1,0 +1,47 @@
+{{ define "main" }}
+{{- $posts := where site.RegularPages "Section" "in" site.Params.mainSections }}
+<div class="wrap">
+  <header class="page-head">
+    <h1>{{ .Title }}</h1>
+    <p>{{ len $posts }} articles since {{ (index $posts.ByDate 0).Date.Year }}.</p>
+  </header>
+  <div class="archive-layout">
+    <div>
+      {{- range $posts.GroupByDate "2006" }}
+      <section class="year-group" id="y{{ .Key }}">
+        <h2>{{ .Key }} <small>{{ len .Pages }}</small></h2>
+        <ul class="rows">
+          {{- range .Pages }}
+          {{- $cats := .GetTerms "categories" }}
+          {{- $icon := "folder" }}{{ with $cats }}{{ $icon = partial "cat-icon.html" (index . 0) }}{{ end }}
+          <li><a class="row" href="{{ .RelPermalink }}">
+            {{- with partial "post-image.html" . }}{{ partial "img.html" (dict "res" . "w" 128 "h" 96 "sizes" "64px") }}{{ else }}<span class="ph">{{ partial "icon.html" $icon }}</span>{{ end }}
+            <span><b>{{ .Title }}</b><span>{{ range $i, $c := $cats }}{{ if $i }}, {{ end }}{{ $c.LinkTitle }}{{ end }}</span></span>
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan" }}</time>
+          </a></li>
+          {{- end }}
+        </ul>
+      </section>
+      {{- end }}
+    </div>
+    <aside>
+      <div class="side-box">
+        <h2>Categories</h2>
+        <ul class="chips">
+          {{- range site.Taxonomies.categories.ByCount }}
+          <li><a class="chip" href="{{ .Page.RelPermalink }}"><span class="ic">{{ partial "icon.html" (partial "cat-icon.html" .Page) }}</span>{{ .Page.LinkTitle }}<span class="n">{{ .Count }}</span></a></li>
+          {{- end }}
+        </ul>
+      </div>
+      <div class="side-box">
+        <h2>Tags</h2>
+        <ul class="chips">
+          {{- range site.Taxonomies.tags.Alphabetical }}
+          <li><a class="chip tag" href="{{ .Page.RelPermalink }}">{{ .Page.LinkTitle }}</a></li>
+          {{- end }}
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+{{ end }}

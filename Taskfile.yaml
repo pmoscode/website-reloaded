@@ -1,0 +1,97 @@
+# https://taskfile.dev
+version: "3"
+
+vars:
+  PUBLIC_DIR: public
+  BIN_DIR: "{{.ROOT_DIR}}/.bin"
+  # renovate: datasource=github-releases depName=Pagefind/pagefind
+  PAGEFIND_VERSION: "1.6.0"
+  PAGEFIND: "{{.BIN_DIR}}/pagefind"
+
+tasks:
+  default:
+    desc: Listet alle Tasks
+    silent: true
+    cmd: task --list
+
+  # ── Tools ────────────────────────────────────────────────────
+
+  tools:pagefind:
+    desc: Lädt das Pagefind-Binary (kein Node nötig) nach .bin/
+    status:
+      - test -x {{.PAGEFIND}}
+      - '{{.PAGEFIND}} --version | grep -q "{{.PAGEFIND_VERSION}}"'
+    vars:
+      ARCH:
+        sh: uname -m | sed 's/arm64/aarch64/'
+      TARGET: '{{if eq OS "darwin"}}{{.ARCH}}-apple-darwin{{else}}{{.ARCH}}-unknown-linux-musl{{end}}'
+    cmds:
+      - mkdir -p {{.BIN_DIR}}
+      - curl -fsSL "https://github.com/Pagefind/pagefind/releases/download/v{{.PAGEFIND_VERSION}}/pagefind-v{{.PAGEFIND_VERSION}}-{{.TARGET}}.tar.gz" | tar -xz -C {{.BIN_DIR}} pagefind
+      - chmod +x {{.PAGEFIND}}
+
+  # ── Entwicklung ──────────────────────────────────────────────
+
+  serve:
+    desc: Dev-Server mit Drafts & Live-Reload (Suchindex wird vorher erzeugt)
+    deps: [search:index]
+    cmd: hugo server --environment development --logLevel info --disableFastRender
+
+  search:index:
+    desc: Erzeugt den Pagefind-Index für den Dev-Server (static/pagefind)
+    deps: [tools:pagefind]
+    sources:
+      - content/**/*.md
+      - layouts/**/*
+    generates:
+      - static/pagefind/pagefind.js
+    cmds:
+      - hugo --environment development --destination .task/search-build --quiet
+      - '{{.PAGEFIND}} --site .task/search-build --output-path static/pagefind'
+
+  # ── Builds ───────────────────────────────────────────────────
+
+  build:
+    desc: "Build für eine Umgebung (ENV=production|staging|development, Standard: production)"
+    deps: [clean, tools:pagefind]
+    vars:
+      ENV: '{{.ENV | default "production"}}'
+    cmds:
+      - hugo --gc --minify --environment {{.ENV}} --logLevel info
+      - '{{.PAGEFIND}} --site {{.PUBLIC_DIR}}'
+
+  build:staging:
+    desc: Staging-Build
+    cmds:
+      - task: build
+        vars: { ENV: staging }
+
+  preview:
+    desc: Produktions-Build lokal ansehen (inkl. Suche) unter http://localhost:1414
+    deps: [build]
+    cmd: '{{.PAGEFIND}} --site {{.PUBLIC_DIR}} --serve --port 1414'
+
+  clean:
+    desc: Löscht Build-Ausgabe und Hugo-Cache
+    cmds:
+      - rm -rf {{.PUBLIC_DIR}} resources/_gen .hugo_build.lock .task/search-build
+
+  # ── Content ──────────────────────────────────────────────────
+
+  new:post:
+    desc: "Neuen Artikel als Page Bundle anlegen (NAME=mein-artikel, YEAR optional)"
+    requires:
+      vars: [NAME]
+    vars:
+      YEAR: '{{.YEAR | default (now | date "2006")}}'
+    cmds:
+      - hugo new content post/{{.YEAR}}/{{.NAME}}/index.md
+      - mkdir -p content/post/{{.YEAR}}/{{.NAME}}/img
+
+  # ── Checks ───────────────────────────────────────────────────
+
+  check:
+    desc: Build mit strikten Prüfungen (Warnungen → Fehler)
+    cmds:
+      - hugo --environment production --panicOnWarning --printPathWarnings --destination .task/check-build --quiet
+      - rm -rf .task/check-build

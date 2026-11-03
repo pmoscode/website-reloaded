@@ -1,0 +1,8 @@
+# GitHub Pages – URL anpassen, sobald das Repo feststeht
+baseURL: "https://pmoscode.github.io/website-reloaded/"
+buildDrafts: true
+buildFuture: true
+
+# Staging soll nicht in Suchmaschinen landen
+params:
+  noindex: true

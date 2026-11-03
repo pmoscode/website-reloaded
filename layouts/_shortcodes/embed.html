@@ -1,0 +1,20 @@
+{{- /*
+  Externes iframe, das erst nach Zustimmung geladen wird.
+  {{< embed consent="itchio" src="https://…" width="556" height="171" title="…" link="https://…" >}}
+  consent = key aus data/consent.yaml
+*/ -}}
+{{- $key := .Get "consent" -}}
+{{- $item := "" -}}
+{{- range hugo.Data.consent.items }}{{ if eq .key $key }}{{ $item = . }}{{ end }}{{ end -}}
+{{- if not $item }}{{ errorf "embed: unknown consent key %q in %s" $key .Position }}{{ end -}}
+{{- $title := .Get "title" | default $item.title -}}
+<div class="embed" data-consent-embed="{{ $key }}" data-src="{{ .Get "src" }}" data-width="{{ .Get "width" | default "100%" }}" data-height="{{ .Get "height" | default "400" }}" data-title="{{ $title }}">
+  <div class="embed-ph">
+    <b>{{ $title }}</b>
+    <p>{{ $item.description }}</p>
+    <div class="actions">
+      <button class="btn" type="button" data-consent-allow="{{ $key }}">Load {{ $item.title }}</button>
+      {{- with .Get "link" }}<a class="btn ghost" href="{{ . }}" rel="noopener">Open on the website</a>{{ end }}
+    </div>
+  </div>
+</div>

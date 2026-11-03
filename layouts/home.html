@@ -1,0 +1,30 @@
+{{ define "main" }}
+{{- $posts := where site.RegularPages "Section" "in" site.Params.mainSections }}
+{{- $latest := index $posts 0 }}
+<div class="wrap">
+  <section class="hero">
+    <div>
+      <h1>{{ site.Params.motto }}</h1>
+      <p class="intro">{{ site.Params.description }}</p>
+      <ul class="chips" aria-label="Categories">
+        {{- range site.Taxonomies.categories.ByCount }}
+        <li><a class="chip" href="{{ .Page.RelPermalink }}"><span class="ic">{{ partial "icon.html" (partial "cat-icon.html" .Page) }}</span>{{ .Page.LinkTitle }}<span class="n">{{ .Count }}</span></a></li>
+        {{- end }}
+      </ul>
+    </div>
+    {{ partial "hero-stage.html" $latest }}
+  </section>
+
+  {{- with $latest }}
+  <div class="sec-head"><h2>Latest article</h2></div>
+  {{ partial "card.html" (dict "page" . "featured" true) }}
+  {{- end }}
+
+  <div class="sec-head"><h2>More projects</h2><a href="{{ "page/archives/" | relURL }}">All articles by year</a></div>
+  <div class="grid">
+    {{- range $i, $p := first site.Params.homeLatest (after 1 $posts) }}
+      {{ partial "card.html" (dict "page" $p "eager" (lt $i 3)) }}
+    {{- end }}
+  </div>
+</div>
+{{ end }}

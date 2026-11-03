@@ -1,0 +1,19 @@
+{{ define "main" }}
+{{- $isCat := eq .Data.Plural "categories" }}
+<div class="wrap">
+  <header class="page-head">
+    <div class="kicker">
+      {{- if $isCat }}<span class="badge">{{ partial "icon.html" (partial "cat-icon.html" .) }}</span>{{ end }}
+      <a class="chip tag" href="{{ (site.GetPage .Data.Plural).RelPermalink }}">{{ .Data.Plural | title }}</a>
+    </div>
+    <h1>{{ .Title }}</h1>
+    <p>{{ len .Pages }} {{ cond (eq (len .Pages) 1) "article" "articles" }}{{ if eq .Data.Plural "series" }} in this series{{ end }}.</p>
+  </header>
+  {{- $pages := .Pages }}{{ if eq .Data.Plural "series" }}{{ $pages = .Pages.ByDate }}{{ end }}
+  {{- $pag := .Paginate $pages }}
+  <div class="grid">
+    {{- range $i, $p := $pag.Pages }}{{ partial "card.html" (dict "page" $p "eager" (lt $i 3)) }}{{ end }}
+  </div>
+  {{ partial "pager.html" . }}
+</div>
+{{ end }}

@@ -1,0 +1,133 @@
+# Basis-Konfiguration – gilt für alle Umgebungen.
+# Umgebungsspezifische Abweichungen liegen in config/<environment>/hugo.yaml
+# und werden von Hugo automatisch darübergelegt.
+
+baseURL: "http://localhost:1313/"
+locale: "en-US"
+defaultContentLanguage: en
+title: "pmoscode"
+copyright: "pmoscode"
+
+enableRobotsTXT: true
+enableGitInfo: false
+capitalizeListTitles: false
+
+# Keine permalinks-Regel: URLs bleiben wie auf der alten Seite
+# (/post/<jahr>/<name>/, /page/about/ …).
+
+pagination:
+  pagerSize: 12
+
+taxonomies:
+  category: categories
+  tag: tags
+  series: series
+
+params:
+  description: "Build notes from my workshop and my terminal: woodworking, 3D printing, laser cutting, Raspberry Pi hardware and small games."
+  motto: "Every solution requires a problem."
+  author: "pmoscode"
+  since: 2019
+  mainSections: ["post"]
+  dateFormat: "02 Jan 2006"
+  dateFormatLong: "2 January 2006"
+  license: "Licensed under CC BY-NC-ND 4.0"
+  homeLatest: 9          # Anzahl Karten unter dem neuesten Beitrag
+  toc: true              # Inhaltsverzeichnis, wenn der Artikel Überschriften hat
+
+  # Icon je Kategorie (Datei in assets/icons/<icon>.svg)
+  categoryIcons:
+    computer: computer
+    3d print: print
+    woodwork: wood
+    hardware: hardware
+    lasercutter: laser
+  categoryIconDefault: folder
+
+  # Matomo wird nur gerendert, wenn url + siteId gesetzt sind
+  # (in production gesetzt) – und erst nach Zustimmung im Consent-Overlay.
+  analytics:
+    matomo:
+      url: ""
+      siteId: ""
+
+  social:
+    - name: GitHub
+      url: https://github.com/pmoscode
+      icon: brand-github
+    - name: Bluesky
+      url: https://bsky.app/profile/pmoscode.bsky.social
+      icon: brand-bluesky
+    - name: Substack
+      url: https://pmoscode.substack.com/
+      icon: brand-substack
+    - name: Medium
+      url: https://medium.com/@info_26971
+      icon: brand-medium
+    - name: Tumblr
+      url: https://www.tumblr.com/blog/pmoscode
+      icon: brand-tumblr
+
+menus:
+  main:
+    - name: Projects
+      pageRef: /
+      weight: 10
+    - name: Categories
+      pageRef: /categories
+      weight: 20
+    - name: Archives
+      pageRef: /page/archives
+      weight: 30
+    - name: About
+      pageRef: /page/about
+      weight: 40
+
+related:
+  includeNewer: true
+  threshold: 60
+  toLower: false
+  indices:
+    - name: series
+      weight: 150
+    - name: tags
+      weight: 100
+    - name: categories
+      weight: 200
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: false
+    parser:
+      # Einzelne Bilder werden zu <figure> statt <p><img>
+      wrapStandAloneImageWithinParagraph: false
+      attribute:
+        block: true
+  tableOfContents:
+    startLevel: 1
+    endLevel: 3
+    ordered: false
+  highlight:
+    noClasses: false
+    codeFences: true
+    guessSyntax: true
+    lineNos: false
+    tabWidth: 4
+
+imaging:
+  jpeg:
+    quality: 82
+  webp:
+    quality: 80
+  resampleFilter: lanczos
+
+outputs:
+  home: [html, rss]
+  section: [html, rss]
+  taxonomy: [html]
+  term: [html, rss]
+
+build:
+  buildStats:
+    enable: true

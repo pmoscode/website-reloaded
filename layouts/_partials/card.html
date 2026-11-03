@@ -1,0 +1,34 @@
+{{- /* Beitragskarte. Aufruf: partial "card.html" (dict "page" . "featured" false "eager" false) */ -}}
+{{- $p := .page -}}
+{{- $featured := .featured | default false -}}
+{{- $cats := $p.GetTerms "categories" -}}
+{{- $icon := "folder" -}}
+{{- with $cats }}{{ $icon = partial "cat-icon.html" (index . 0) }}{{ end -}}
+{{- $series := partial "series.html" $p -}}
+<a class="card{{ if $featured }} featured{{ end }}" href="{{ $p.RelPermalink }}">
+  <div class="media">
+    {{- with partial "post-image.html" $p }}
+      {{- if $featured }}
+        {{- partial "img.html" (dict "res" . "w" 960 "h" 600 "sizes" "(max-width: 900px) 100vw, 700px" "eager" true) }}
+      {{- else }}
+        {{- partial "img.html" (dict "res" . "w" 480 "h" 300 "sizes" "(max-width: 700px) 100vw, 400px" "eager" $.eager) }}
+      {{- end }}
+    {{- else }}
+      <div class="ph">{{ partial "icon.html" $icon }}</div>
+    {{- end }}
+    {{- with $series }}{{ if gt .total 1 }}<span class="part">Part {{ .index }} of {{ .total }}</span>{{ end }}{{ end }}
+    {{- if not $featured }}<span class="badge">{{ partial "icon.html" $icon }}</span>{{ end }}
+  </div>
+  <div class="body">
+    {{- if $featured }}<span class="badge">{{ partial "icon.html" $icon }}</span>{{ end }}
+    <h3>{{ $p.Title }}</h3>
+    {{- with $p.Description }}<p>{{ . }}</p>{{ end }}
+    <div class="meta">
+      {{- with $cats }}<b>{{ range $i, $c := . }}{{ if $i }}, {{ end }}{{ $c.LinkTitle }}{{ end }}</b>{{ end }}
+      <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format site.Params.dateFormat }}</time>
+      <span>{{ $p.ReadingTime }} min read</span>
+    </div>
+    {{- if $featured }}<span class="btn">Read the article</span>{{ end }}
+  </div>
+</a>
+{{- /**/ -}}

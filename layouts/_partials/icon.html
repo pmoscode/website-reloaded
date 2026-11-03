@@ -1,0 +1,15 @@
+{{- /*
+  Inline-SVG-Icon aus assets/icons/<name>.svg
+  Aufruf: partial "icon.html" "search"  oder  partial "icon.html" (dict "name" "search" "class" "big")
+*/ -}}
+{{- $name := . -}}
+{{- $class := "icon" -}}
+{{- if reflect.IsMap . -}}
+  {{- $name = .name -}}
+  {{- with .class }}{{ $class = printf "icon %s" . }}{{ end -}}
+{{- end -}}
+{{- with resources.Get (printf "icons/%s.svg" $name) -}}
+  {{- replace (strings.TrimSpace .Content) "<svg " (printf `<svg class="%s" aria-hidden="true" focusable="false" ` $class) 1 | safeHTML -}}
+{{- else -}}
+  {{- errorf "icon %q not found in assets/icons" $name -}}
+{{- end -}}

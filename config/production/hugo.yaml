@@ -1,0 +1,7 @@
+baseURL: "https://pmoscode.dev/"
+
+params:
+  analytics:
+    matomo:
+      url: "//analytics.pmoscode.dev/"
+      siteId: "1"

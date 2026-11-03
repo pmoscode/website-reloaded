@@ -1,0 +1,12 @@
+{{- /* Alle zustimmungspflichtigen Dienste: data/consent.yaml + Matomo (falls konfiguriert). */ -}}
+{{- $items := slice -}}
+{{- with hugo.Data.consent }}{{ range .items }}{{ $items = $items | append . }}{{ end }}{{ end -}}
+{{- with site.Params.analytics.matomo -}}
+  {{- if and .url .siteId -}}
+    {{- $items = $items | append (dict
+        "key" "matomo"
+        "title" "Matomo statistics"
+        "description" "Privacy-friendly visitor statistics, self-hosted on analytics.pmoscode.dev. No data is shared with third parties.") -}}
+  {{- end -}}
+{{- end -}}
+{{- return $items -}}

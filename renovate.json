@@ -1,0 +1,15 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Tool-Versionen in Workflows und Taskfile (Kommentar: # renovate: datasource=… depName=…)",
+      "managerFilePatterns": ["/^\\.github/workflows/.+\\.ya?ml$/", "/^Taskfile\\.ya?ml$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?) depName=(?<depName>[^\\s]+?)\\s+[A-Z_]+_VERSION: ['\"]?v?(?<currentValue>[^'\"\\s]+)"
+      ],
+      "extractVersionTemplate": "^v?(?<version>.*)$"
+    }
+  ]
+}

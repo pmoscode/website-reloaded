@@ -1,0 +1,72 @@
+/* ── Schriften (selbst gehostet, siehe assets/fonts) ── */
+@font-face {
+  font-family: "Onest";
+  src: url("../fonts/onest-latin-wght.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/jetbrains-mono-latin-wght.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+/* ── Design-Tokens ───────────────────────────────── */
+:root {
+  color-scheme: light;
+  --bg: #F2F3F5;
+  --surface: #FFFFFF;
+  --surface-2: #F7F7F9;
+  --ink: #1E2227;
+  --mute: #5F6771;
+  --line: #E2E4E8;
+
+  --orange: #F5A05C;          /* Primärfarbe: sanftes Orange */
+  --orange-ink: #A9561A;      /* Orange für Text auf hellem Grund (Kontrast ≥ 4.5:1) */
+  --orange-tint: #FDEEE2;
+  --on-orange: #2E1C0E;
+
+  --term: #20242A;            /* Terminal-Fenster bleiben immer dunkel */
+  --term-ink: #E6E8EB;
+
+  --sh-1: 0 1px 1px rgb(24 28 36 / .04), 0 2px 6px rgb(24 28 36 / .05), 0 10px 24px -10px rgb(24 28 36 / .10);
+  --sh-2: 0 1px 2px rgb(24 28 36 / .05), 0 8px 18px -6px rgb(24 28 36 / .10), 0 30px 60px -24px rgb(24 28 36 / .22);
+  --sh-3: 0 2px 4px rgb(24 28 36 / .06), 0 16px 32px -10px rgb(24 28 36 / .16), 0 48px 90px -30px rgb(24 28 36 / .32);
+
+  --r-lg: 22px;
+  --r-md: 14px;
+  --r-sm: 10px;
+
+  --sans: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --wrap: 1200px;
+  --measure: 700px;
+  --pad: clamp(16px, 4vw, 40px);
+  --header-h: 84px;
+}
+
+/* Dark Mode: folgt dem System, außer der Nutzer hat umgeschaltet (data-theme) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #15171B; --surface: #1E2126; --surface-2: #25292F;
+    --ink: #ECEDEF; --mute: #A0A7B0; --line: #2E3239;
+    --orange: #F6A866; --orange-ink: #F6A866; --orange-tint: #3A2A1E;
+    --term: #0F1114;
+    --sh-1: 0 1px 1px rgb(0 0 0 / .3), 0 6px 18px -8px rgb(0 0 0 / .5);
+    --sh-2: 0 2px 4px rgb(0 0 0 / .3), 0 20px 40px -18px rgb(0 0 0 / .7);
+    --sh-3: 0 4px 8px rgb(0 0 0 / .35), 0 40px 80px -30px rgb(0 0 0 / .85);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #15171B; --surface: #1E2126; --surface-2: #25292F;
+  --ink: #ECEDEF; --mute: #A0A7B0; --line: #2E3239;
+  --orange: #F6A866; --orange-ink: #F6A866; --orange-tint: #3A2A1E;
+  --term: #0F1114;
+  --sh-1: 0 1px 1px rgb(0 0 0 / .3), 0 6px 18px -8px rgb(0 0 0 / .5);
+  --sh-2: 0 2px 4px rgb(0 0 0 / .3), 0 20px 40px -18px rgb(0 0 0 / .7);
+  --sh-3: 0 4px 8px rgb(0 0 0 / .35), 0 40px 80px -30px rgb(0 0 0 / .85);
+}
