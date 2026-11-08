@@ -2,17 +2,13 @@
   Inhaltsverzeichnis aus den Überschriften – unabhängig davon, ob ein Artikel mit # oder ## beginnt.
   Zeigt die oberste vorhandene Ebene und eine darunter. Gibt "" zurück, wenn es weniger als 3 Einträge gibt.
 */ -}}
-{{- $hm := .Fragments.HeadingsMap -}}
+{{- /* Baum in Dokument-Reihenfolge abflachen (.Fragments.Identifiers ist alphabetisch sortiert!) */ -}}
 {{- $hs := slice -}}
-{{- $min := 9 -}}
-{{- range .Fragments.Identifiers -}}
-  {{- with index $hm . -}}
-    {{- if and .Title (le .Level 4) -}}
-      {{- $hs = $hs | append . -}}
-      {{- if lt .Level $min }}{{ $min = .Level }}{{ end -}}
-    {{- end -}}
-  {{- end -}}
+{{- range partial "inline/toc-flatten.html" .Fragments.Headings -}}
+  {{- if and .Title (le .Level 4) }}{{ $hs = $hs | append . }}{{ end -}}
 {{- end -}}
+{{- $min := 9 -}}
+{{- range $hs }}{{ if lt .Level $min }}{{ $min = .Level }}{{ end }}{{ end -}}
 {{- $items := slice -}}
 {{- range $hs }}{{ if le .Level (add $min 1) }}{{ $items = $items | append . }}{{ end }}{{ end -}}
 {{- $out := "" -}}
@@ -24,3 +20,12 @@
   {{- $out = printf "%s</ol>" $out -}}
 {{- end -}}
 {{- return ($out | safeHTML) -}}
+
+{{- define "_partials/inline/toc-flatten.html" -}}
+  {{- $out := slice -}}
+  {{- range . -}}
+    {{- $out = $out | append . -}}
+    {{- with .Headings }}{{ $out = $out | append (partial "inline/toc-flatten.html" .) }}{{ end -}}
+  {{- end -}}
+  {{- return $out -}}
+{{- end -}}

@@ -329,7 +329,7 @@ enough. That the wreck looked like a vending machine. I picked the music on Suno
 GarageBand.
 
 Whether this is a "real" game is debatable. In any case, this week I got a game that tells exactly the story I wanted
-to tell, and that I would never have managed to finish on my own at this scope. Not in a week, and not in a year.
+to tell, and that I would never have managed to finish on my own at this scope. Not in a week, and not in a month.
 
 What I learned: the tools are good at building things. Whether it feels right still needs someone to play it and say
 so. In my project notes, a surprising number of improvements start with "Pete found …".
