@@ -15,7 +15,7 @@
 /* ── Badge (Kategorie-Icon auf Orange) ───────────── */
 .badge {
   display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px;
-  background: var(--orange); color: var(--on-orange);
+  background: var(--orange-fill); color: var(--on-orange);
 }
 .badge .icon { width: 24px; height: 24px; }
 
@@ -63,8 +63,8 @@
 /* ── Buttons ─────────────────────────────────────── */
 .btn {
   display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1.1rem; border: 0; border-radius: 12px;
-  background: var(--orange); color: var(--on-orange); font: 600 1rem var(--sans); text-decoration: none; cursor: pointer;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / .4), 0 6px 16px -6px color-mix(in srgb, var(--orange) 80%, transparent);
+  background: var(--orange-fill); color: var(--on-orange); font: 600 1rem var(--sans); text-decoration: none; cursor: pointer;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .18), 0 6px 16px -6px color-mix(in srgb, var(--orange-fill) 80%, transparent);
 }
 .btn:hover { filter: brightness(1.04); }
 .btn.ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); box-shadow: none; }
@@ -75,7 +75,7 @@
   display: grid; place-items: center; min-width: 42px; height: 42px; padding: 0 .8rem; border-radius: 11px;
   background: var(--surface); border: 1px solid var(--line); text-decoration: none; font-weight: 550;
 }
-.pager [aria-current] { background: var(--orange); border-color: var(--orange); color: var(--on-orange); }
+.pager [aria-current] { background: var(--orange-fill); border-color: var(--orange-fill); color: var(--on-orange); }
 .pager span { color: var(--mute); opacity: .6; }
 
 /* ── Archiv ──────────────────────────────────────── */

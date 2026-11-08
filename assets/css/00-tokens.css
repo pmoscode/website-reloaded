@@ -15,24 +15,25 @@
 /* ── Design-Tokens ───────────────────────────────── */
 :root {
   color-scheme: light;
-  --bg: #F2F3F5;
-  --surface: #FFFFFF;
-  --surface-2: #F7F7F9;
-  --ink: #1E2227;
-  --mute: #5F6771;
-  --line: #E2E4E8;
+  --bg: #F3F1EE;              /* Neutrale Töne leicht warm, passend zum Terrakotta */
+  --surface: #FFFDFA;
+  --surface-2: #F8F6F3;
+  --ink: #24201C;
+  --mute: #6B635B;
+  --line: #E6E1DA;
 
-  --orange: #F5A05C;          /* Primärfarbe: sanftes Orange */
-  --orange-ink: #A9561A;      /* Orange für Text auf hellem Grund (Kontrast ≥ 4.5:1) */
-  --orange-tint: #FDEEE2;
-  --on-orange: #2E1C0E;
+  --orange: #BF6B4E;          /* Primärfarbe: Terrakotta (Akzente, Icons, Rahmen) */
+  --orange-fill: #A9573C;     /* tieferes Terrakotta für Flächen mit Text darauf */
+  --orange-ink: #984630;      /* Terrakotta für Text auf hellem Grund (Kontrast ≥ 4.5:1) */
+  --orange-tint: #F6E6DF;
+  --on-orange: #FFF7F0;       /* helle Schrift auf --orange-fill (Kontrast ≈ 4.8:1) */
 
-  --term: #20242A;            /* Terminal-Fenster bleiben immer dunkel */
-  --term-ink: #E6E8EB;
+  --term: #221F1C;            /* Terminal-Fenster bleiben immer dunkel */
+  --term-ink: #E9E6E2;
 
-  --sh-1: 0 1px 1px rgb(24 28 36 / .04), 0 2px 6px rgb(24 28 36 / .05), 0 10px 24px -10px rgb(24 28 36 / .10);
-  --sh-2: 0 1px 2px rgb(24 28 36 / .05), 0 8px 18px -6px rgb(24 28 36 / .10), 0 30px 60px -24px rgb(24 28 36 / .22);
-  --sh-3: 0 2px 4px rgb(24 28 36 / .06), 0 16px 32px -10px rgb(24 28 36 / .16), 0 48px 90px -30px rgb(24 28 36 / .32);
+  --sh-1: 0 1px 1px rgb(36 28 20 / .04), 0 2px 6px rgb(36 28 20 / .05), 0 10px 24px -10px rgb(36 28 20 / .10);
+  --sh-2: 0 1px 2px rgb(36 28 20 / .05), 0 8px 18px -6px rgb(36 28 20 / .10), 0 30px 60px -24px rgb(36 28 20 / .22);
+  --sh-3: 0 2px 4px rgb(36 28 20 / .06), 0 16px 32px -10px rgb(36 28 20 / .16), 0 48px 90px -30px rgb(36 28 20 / .32);
 
   --r-lg: 22px;
   --r-md: 14px;
@@ -51,10 +52,10 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --bg: #15171B; --surface: #1E2126; --surface-2: #25292F;
-    --ink: #ECEDEF; --mute: #A0A7B0; --line: #2E3239;
-    --orange: #F6A866; --orange-ink: #F6A866; --orange-tint: #3A2A1E;
-    --term: #0F1114;
+    --bg: #171513; --surface: #201D1A; --surface-2: #282420;
+    --ink: #EEEAE5; --mute: #A89F96; --line: #332E29;
+    --orange: #C97A5E; --orange-ink: #C97A5E; --orange-tint: #3A2620;
+    --term: #110F0D;
     --sh-1: 0 1px 1px rgb(0 0 0 / .3), 0 6px 18px -8px rgb(0 0 0 / .5);
     --sh-2: 0 2px 4px rgb(0 0 0 / .3), 0 20px 40px -18px rgb(0 0 0 / .7);
     --sh-3: 0 4px 8px rgb(0 0 0 / .35), 0 40px 80px -30px rgb(0 0 0 / .85);
@@ -62,10 +63,10 @@
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #15171B; --surface: #1E2126; --surface-2: #25292F;
-  --ink: #ECEDEF; --mute: #A0A7B0; --line: #2E3239;
-  --orange: #F6A866; --orange-ink: #F6A866; --orange-tint: #3A2A1E;
-  --term: #0F1114;
+  --bg: #171513; --surface: #201D1A; --surface-2: #282420;
+  --ink: #EEEAE5; --mute: #A89F96; --line: #332E29;
+  --orange: #C97A5E; --orange-ink: #C97A5E; --orange-tint: #3A2620;
+  --term: #110F0D;
   --sh-1: 0 1px 1px rgb(0 0 0 / .3), 0 6px 18px -8px rgb(0 0 0 / .5);
   --sh-2: 0 2px 4px rgb(0 0 0 / .3), 0 20px 40px -18px rgb(0 0 0 / .7);
   --sh-3: 0 4px 8px rgb(0 0 0 / .35), 0 40px 80px -30px rgb(0 0 0 / .85);

@@ -9,8 +9,8 @@
 
 {{- /* Theme früh setzen, damit es kein Aufblitzen gibt */}}
 <script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-<meta name="theme-color" content="#F2F3F5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#15171B" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3F1EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171513" media="(prefers-color-scheme: dark)">
 
 {{- /* Schriften veröffentlichen + vorladen */}}
 {{- with resources.Get "fonts/onest-latin-wght.woff2" }}
@@ -25,7 +25,7 @@
 
 {{- /* Favicons: SVG (passt sich Dark Mode an) + PNG/ICO-Fallbacks */}}
 {{- $logo := (resources.Get "logo/logo-round.svg").Content }}
-{{- $fav := replace $logo `aria-hidden="true">` `><style>svg{color:#1E2227}circle{fill:#F5A05C}@media(prefers-color-scheme:dark){svg{color:#15171B}}</style>` 1 }}
+{{- $fav := replace $logo `aria-hidden="true">` `><style>svg{color:#FFF7F0}circle{fill:#BF6B4E;stroke:#BF6B4E}</style>` 1 }}
 {{- $fav = resources.FromString "favicon.svg" $fav }}
 <link rel="icon" href="{{ $fav.RelPermalink }}" type="image/svg+xml">
 <link rel="icon" href="{{ "favicon/favicon-32x32.png" | relURL }}" sizes="32x32" type="image/png">

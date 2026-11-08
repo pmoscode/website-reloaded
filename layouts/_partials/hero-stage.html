@@ -12,8 +12,13 @@
 <span class="p">$</span> <span class="cursor"></span></pre>
   </div>
   <div class="layer l-print" data-depth="22">
-    {{ partial "icon.html" (dict "name" "print" "class" "big") }}
-    <div><b>3D print</b><small>{{ with $print }}{{ len .Pages }} projects{{ else }}Filament & patience{{ end }}</small></div>
+    <div class="job-head"><b><i class="live"></i>3D print</b><small>{{ with $print }}{{ len .Pages }} projects{{ else }}slicing…{{ end }}</small></div>
+    {{ (resources.Get "hero/print-preview.svg").Content | safeHTML }}
+    <div class="job">
+      <div class="job-row"><span>vase_v3.gcode</span><span>62 %</span></div>
+      <div class="bar"><i></i></div>
+      <div class="job-row mute"><span>215 °C · 60 °C</span><span>1:24 h</span></div>
+    </div>
   </div>
-  <div class="layer l-saw" data-depth="34">{{ partial "icon.html" "wood" }}</div>
+  <div class="layer l-saw" data-depth="34">{{ (resources.Get "hero/saw.svg").Content | safeHTML }}</div>
 </div>

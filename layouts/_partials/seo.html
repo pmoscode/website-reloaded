@@ -7,7 +7,7 @@
 
 {{- $img := "" -}}
 {{- if $p.IsPage }}{{ with partial "post-image.html" $p }}{{ if not (in (slice "gif" "svg+xml") .MediaType.SubType) }}{{ $img = .Fill "1200x630 jpg smart q80" }}{{ else }}{{ $img = . }}{{ end }}{{ end }}{{ end -}}
-{{- if not $img }}{{ with resources.Get "img/og-logo.png" }}{{ $img = .Resize "630x630 jpg #F5A05C" }}{{ end }}{{ end }}
+{{- if not $img }}{{ with resources.Get "img/og-logo.png" }}{{ $img = .Resize "630x630 jpg #BF6B4E" }}{{ end }}{{ end }}
 
 <meta property="og:site_name" content="{{ site.Title }}">
 <meta property="og:title" content="{{ $p.Title | default site.Title }}">
