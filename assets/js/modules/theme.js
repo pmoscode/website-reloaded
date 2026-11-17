@@ -4,6 +4,14 @@ const root = document.documentElement;
 const systemDark = () => matchMedia('(prefers-color-scheme: dark)').matches;
 const isDark = () => (root.dataset.theme || (systemDark() ? 'dark' : 'light')) === 'dark';
 
+// theme-color (Browserleiste): bei manueller Wahl beide Metas auf das gewählte Theme setzen
+const COLORS = { light: '#F3F1EE', dark: '#171513' };
+function syncThemeColor() {
+  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
+    m.content = COLORS[root.dataset.theme || m.dataset.scheme];
+  });
+}
+
 export function initTheme() {
   document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
     const sync = () => btn.setAttribute('aria-pressed', String(isDark()));
@@ -19,6 +27,7 @@ export function initTheme() {
         try { localStorage.setItem(KEY, next); } catch {}
       }
       sync();
+      syncThemeColor();
     });
   });
 }

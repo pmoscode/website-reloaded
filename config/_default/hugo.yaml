@@ -15,6 +15,13 @@ capitalizeListTitles: false
 # Keine permalinks-Regel: URLs bleiben wie auf der alten Seite
 # (/post/<jahr>/<name>/, /page/about/ …).
 
+# Aus Page Bundles nur veröffentlichen, was ein Template wirklich verlinkt
+# (WebP-Varianten, GIFs, SVGs, Downloads) – nicht die oft mehrere MB großen Originale.
+# Downloads im Text (z. B. [STL](misc/teil.stl)) löst render-link.html als Resource auf.
+cascade:
+  - build:
+      publishResources: false
+
 pagination:
   pagerSize: 12
 
@@ -127,7 +134,3 @@ outputs:
   section: [html, rss]
   taxonomy: [html]
   term: [html, rss]
-
-build:
-  buildStats:
-    enable: true

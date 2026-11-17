@@ -12,7 +12,7 @@
   {{- $pages := .Pages }}{{ if eq .Data.Plural "series" }}{{ $pages = .Pages.ByDate }}{{ end }}
   {{- $pag := .Paginate $pages }}
   <div class="grid">
-    {{- range $i, $p := $pag.Pages }}{{ partial "card.html" (dict "page" $p "eager" (lt $i 3)) }}{{ end }}
+    {{- range $i, $p := $pag.Pages }}{{ partial "card.html" (dict "page" $p "eager" (lt $i 3) "h" 2) }}{{ end }}
   </div>
   {{ partial "pager.html" . }}
 </div>

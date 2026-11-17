@@ -1,4 +1,5 @@
-// Zustimmung für externe Dienste (Matomo, Embeds). Gespeichert in localStorage – keine Cookies.
+// Zustimmung für externe Dienste (Matomo, Embeds). Gespeichert in localStorage – keine Cookies
+// (auch Matomo läuft cookielos, siehe disableCookies).
 import * as params from '@params';
 
 const KEY = 'consent';
@@ -37,7 +38,7 @@ function loadMatomo() {
   if (matomoLoaded || !m.url || !m.siteid) return;
   matomoLoaded = true;
   const _paq = (window._paq = window._paq || []);
-  _paq.push(['trackPageView'], ['enableLinkTracking'], ['setTrackerUrl', m.url + 'matomo.php'], ['setSiteId', String(m.siteid)]);
+  _paq.push(['disableCookies'], ['trackPageView'], ['enableLinkTracking'], ['setTrackerUrl', m.url + 'matomo.php'], ['setSiteId', String(m.siteid)]);
   const s = document.createElement('script');
   s.async = true;
   s.src = m.url + 'matomo.js';
@@ -63,20 +64,30 @@ export function initConsent() {
     boxes.forEach((b) => { b.checked = !!state[b.dataset.consentKey]; });
   };
 
+  // Offen ist die Entscheidung, solange es für mindestens einen Dienst noch keine gibt
+  const undecided = () => {
+    const state = read();
+    return !state || items.some(({ key }) => !(key in state));
+  };
+
   // Einbettungen per Klick laden: speichert die Zustimmung für diesen Dienst
   document.querySelectorAll('[data-consent-allow]').forEach((btn) => btn.addEventListener('click', () => {
     const key = btn.dataset.consentAllow;
     write({ ...(read() || {}), [key]: true });
     loadEmbeds(key, true);
-    if (banner) banner.hidden = true;
+    // Banner bleibt sichtbar, solange andere Dienste noch nicht entschieden sind
+    if (banner) banner.hidden = !undecided();
     sync();
   }));
 
   if (!items.length || !dialog) return;
 
   const save = (state) => {
+    const before = read() || {};
     write(state);
     if (banner) banner.hidden = true;
+    // Widerruf: bereits geladene Dienste lassen sich nur durch Neuladen sicher entfernen
+    if (items.some(({ key }) => before[key] && !state[key])) { location.reload(); return; }
     sync();
     apply();
   };
@@ -90,6 +101,6 @@ export function initConsent() {
   });
   dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
 
-  if (read() === null) { if (banner) banner.hidden = false; }
-  else apply();
+  if (undecided() && banner) banner.hidden = false;
+  apply();
 }

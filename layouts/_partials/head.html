@@ -7,10 +7,10 @@
 {{- end }}
 {{ partial "seo.html" (dict "page" . "title" $title) }}
 
-{{- /* Theme früh setzen, damit es kein Aufblitzen gibt */}}
-<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
-<meta name="theme-color" content="#F3F1EE" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#171513" media="(prefers-color-scheme: dark)">
+{{- /* Theme früh setzen, damit es kein Aufblitzen gibt (inkl. theme-color der Browserleiste) */}}
+<meta name="theme-color" content="#F3F1EE" media="(prefers-color-scheme: light)" data-scheme="light">
+<meta name="theme-color" content="#171513" media="(prefers-color-scheme: dark)" data-scheme="dark">
+<script>try{var t=localStorage.getItem("theme");if(t){document.documentElement.dataset.theme=t;document.querySelectorAll("meta[name=theme-color]").forEach(function(m){m.content=t=="dark"?"#171513":"#F3F1EE"})}}catch(e){}</script>
 
 {{- /* Schriften veröffentlichen + vorladen */}}
 {{- with resources.Get "fonts/onest-latin-wght.woff2" }}

@@ -1,0 +1,10 @@
+{{- /*
+  Liefert 1, wenn der Artikel im Text Überschriften der Ebene 1 (#) nutzt, sonst 0.
+  Der Heading-Hook stuft dann alle Überschriften um eine Ebene herab,
+  damit der Seitentitel das einzige <h1> bleibt.
+*/ -}}
+{{- $shift := 0 -}}
+{{- range partial "inline/toc-flatten.html" .Fragments.Headings -}}
+  {{- if and .Title (eq .Level 1) }}{{ $shift = 1 }}{{ end -}}
+{{- end -}}
+{{- return $shift -}}

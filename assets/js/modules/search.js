@@ -28,7 +28,7 @@ function setupBox(box) {
     const all = links();
     if (!all.length) return;
     selected = (i + all.length) % all.length;
-    all.forEach((a, n) => a.setAttribute('aria-selected', String(n === selected)));
+    all.forEach((a, n) => a.toggleAttribute('data-selected', n === selected));
     all[selected].scrollIntoView({ block: 'nearest' });
   };
 

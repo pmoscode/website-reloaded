@@ -54,7 +54,7 @@
 /* ── Fließtext ───────────────────────────────────── */
 .prose { font-size: 1.125rem; line-height: 1.75; overflow-wrap: break-word; }
 .prose > :first-child { margin-top: 0; }
-.prose h2, .prose h1 { font-size: 1.65rem; line-height: 1.2; letter-spacing: -.025em; margin: 2.4rem 0 .6rem; font-weight: 720; }
+.prose h2 { font-size: 1.65rem; line-height: 1.2; letter-spacing: -.025em; margin: 2.4rem 0 .6rem; font-weight: 720; }
 .prose h3 { font-size: 1.3rem; line-height: 1.25; letter-spacing: -.015em; margin: 2rem 0 .4rem; font-weight: 680; }
 .prose h4 { font-size: 1.1rem; margin: 1.6rem 0 .3rem; }
 .prose .anchor { margin-left: .35em; color: var(--orange-ink); text-decoration: none; opacity: 0; transition: opacity .15s; }

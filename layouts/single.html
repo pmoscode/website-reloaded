@@ -34,7 +34,7 @@
 
   {{- if $showHero }}
   <figure class="a-hero" data-pagefind-ignore>
-    {{ partial "img.html" (dict "res" $img "w" 1060 "h" 596 "sizes" "(max-width: 1100px) 100vw, 1060px" "eager" true "alt" "") }}
+    {{ partial "img.html" (dict "res" $img "w" 1060 "h" 596 "sizes" "(max-width: 1100px) 100vw, 1060px" "priority" true "alt" "") }}
   </figure>
   {{- end }}
 
@@ -70,8 +70,8 @@
     <div class="license">{{ partial "icon.html" "license" }}<span>{{ .Params.license | default site.Params.license }}</span></div>
     {{- end }}
     <nav class="neighbors" aria-label="More articles">
-      {{- with .NextInSection }}<a class="prev" href="{{ .RelPermalink }}"><small>Older</small><b>{{ .Title }}</b></a>{{ end }}
-      {{- with .PrevInSection }}<a class="next" href="{{ .RelPermalink }}"><small>Newer</small><b>{{ .Title }}</b></a>{{ end }}
+      {{- with .PrevInSection }}<a class="prev" href="{{ .RelPermalink }}"><small>Older</small><b>{{ .Title }}</b></a>{{ end }}
+      {{- with .NextInSection }}<a class="next" href="{{ .RelPermalink }}"><small>Newer</small><b>{{ .Title }}</b></a>{{ end }}
     </nav>
   </footer>
   {{- end }}

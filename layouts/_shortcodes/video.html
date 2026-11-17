@@ -1,11 +1,17 @@
 {{- /*
   Ersatz für den video-Shortcode aus hugo-theme-stack.
   {{< video src="/mov/…/datei.mp4" autoplay="false" >}}
+  Liegt neben dem Video ein gleichnamiges .jpg (static/mov/…/datei.jpg), wird es als
+  Vorschaubild genutzt und liefert Breite/Höhe – so springt das Layout beim Laden nicht.
 */ -}}
 {{- $src := .Get "src" -}}
 {{- $autoplay := eq (printf "%v" (.Get "autoplay" | default "false")) "true" -}}
+{{- $poster := replaceRE `\.[^./]+$` ".jpg" $src -}}
+{{- $posterFile := path.Join "static" $poster -}}
+{{- $dim := "" -}}
+{{- if fileExists $posterFile }}{{ $dim = imageConfig $posterFile }}{{ else }}{{ $poster = "" }}{{ end -}}
 <figure class="video">
-  <video controls preload="metadata" playsinline{{ if $autoplay }} autoplay muted loop{{ end }}>
+  <video controls preload="metadata" playsinline{{ with $poster }} poster="{{ . | relURL }}"{{ end }}{{ with $dim }} width="{{ .Width }}" height="{{ .Height }}"{{ end }}{{ if $autoplay }} autoplay muted loop{{ end }}>
     <source src="{{ $src | relURL }}" type="video/mp4">
     Your browser cannot play this video. <a href="{{ $src | relURL }}">Download it</a>.
   </video>

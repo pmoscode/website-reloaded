@@ -1,4 +1,5 @@
-{{- /* Beitragskarte. Aufruf: partial "card.html" (dict "page" . "featured" false "eager" false) */ -}}
+{{- /* Beitragskarte. Aufruf: partial "card.html" (dict "page" . "featured" false "eager" false "h" 3) */ -}}
+{{- $h := .h | default 3 -}}
 {{- $p := .page -}}
 {{- $featured := .featured | default false -}}
 {{- $cats := $p.GetTerms "categories" -}}
@@ -9,7 +10,7 @@
   <div class="media">
     {{- with partial "post-image.html" $p }}
       {{- if $featured }}
-        {{- partial "img.html" (dict "res" . "w" 960 "h" 600 "sizes" "(max-width: 900px) 100vw, 700px" "eager" true) }}
+        {{- partial "img.html" (dict "res" . "w" 960 "h" 600 "sizes" "(max-width: 900px) 100vw, 700px" "priority" true) }}
       {{- else }}
         {{- partial "img.html" (dict "res" . "w" 480 "h" 300 "sizes" "(max-width: 700px) 100vw, 400px" "eager" $.eager) }}
       {{- end }}
@@ -21,7 +22,7 @@
   </div>
   <div class="body">
     {{- if $featured }}<span class="badge">{{ partial "icon.html" $icon }}</span>{{ end }}
-    <h3>{{ $p.Title }}</h3>
+    <h{{ $h }}>{{ $p.Title }}</h{{ $h }}>
     {{- with $p.Description }}<p>{{ . }}</p>{{ end }}
     <div class="meta">
       {{- with $cats }}<b>{{ range $i, $c := . }}{{ if $i }}, {{ end }}{{ $c.LinkTitle }}{{ end }}</b>{{ end }}

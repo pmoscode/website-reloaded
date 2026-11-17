@@ -1,6 +1,20 @@
+{{- /*
+  Links im Artikel:
+  - *.md      → Permalink der verlinkten Seite
+  - relativer Pfad auf eine Datei im Page Bundle (z. B. misc/teil.stl) → über die Resource auflösen.
+    Nötig wegen build.publishResources: false – nur so wird die Datei mit veröffentlicht.
+  - externe Links bekommen rel="noopener"
+*/ -}}
 {{- $u := urls.Parse .Destination -}}
 {{- $href := .Destination -}}
-{{- if and (not $u.IsAbs) (strings.HasSuffix $u.Path ".md") }}{{ with .PageInner.GetPage $u.Path }}{{ $href = .RelPermalink }}{{ end }}{{ end -}}
+{{- if and (not $u.IsAbs) $u.Path (not (strings.HasPrefix $u.Path "/")) -}}
+  {{- if strings.HasSuffix $u.Path ".md" -}}
+    {{- with .PageInner.GetPage $u.Path }}{{ $href = .RelPermalink }}{{ end -}}
+  {{- else -}}
+    {{- with .PageInner.Resources.Get $u.Path }}{{ $href = .RelPermalink }}{{ end -}}
+  {{- end -}}
+  {{- with $u.Fragment }}{{ if ne $href $.Destination }}{{ $href = printf "%s#%s" $href . }}{{ end }}{{ end -}}
+{{- end -}}
 {{- $ext := and $u.IsAbs (not (strings.HasPrefix .Destination site.BaseURL)) (in (slice "http" "https") $u.Scheme) -}}
 <a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if $ext }} rel="noopener"{{ end }}>{{ .Text }}</a>
 {{- /**/ -}}
